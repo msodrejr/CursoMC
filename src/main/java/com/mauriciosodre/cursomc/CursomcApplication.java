@@ -62,6 +62,11 @@ public class CursomcApplication implements CommandLineRunner {
 		// Instanciando e testando as categorias
 		Categoria cat1 = new Categoria(null, "Informática");
 		Categoria cat2 = new Categoria(null, "Escritório");
+		Categoria cat3 = new Categoria(null, "Cama, mesa e banho");
+		Categoria cat4 = new Categoria(null, "Eletrônicos");
+		Categoria cat5 = new Categoria(null, "Jardinagem");
+		Categoria cat6 = new Categoria(null, "Decoração");
+		Categoria cat7 = new Categoria(null, "Perfumaria");
 
 		// Instanciando e testando os produtos
 		Produto p1 = new Produto(null, "Computador", 2000.00);
@@ -72,12 +77,13 @@ public class CursomcApplication implements CommandLineRunner {
 		cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
 		cat2.getProdutos().addAll(Arrays.asList(p2));
 
+		// Incluindo as categorias nos produtos
 		p1.getCategorias().addAll(Arrays.asList(cat1));
 		p2.getCategorias().addAll(Arrays.asList(cat1, cat2));
 		p3.getCategorias().addAll(Arrays.asList(cat1));
 
 		// Persistindo as categorias
-		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
+		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
 
 		// Persistindo os produtos
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
@@ -124,39 +130,40 @@ public class CursomcApplication implements CommandLineRunner {
 		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
 		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cli1, e2);
 
-		//Instanciando e testando os pagamentos
+		// Instanciando e testando os pagamentos
 		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
-		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"), null);
-		
-		//Incluindo pagamento nos pedidos
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"),
+				null);
+
+		// Incluindo pagamento nos pedidos
 		ped1.setPagamento(pagto1);
 		ped2.setPagamento(pagto2);
-		
-		//Incluindo pedidos no cliente
+
+		// Incluindo pedidos no cliente
 		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
-		
-		//Persistindo os pedidos
+
+		// Persistindo os pedidos
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
-		
-		//Persistindo os pagamentos
+
+		// Persistindo os pagamentos
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
-		
-		//Instanciando e testando ItemPedido
+
+		// Instanciando e testando ItemPedido
 		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
 		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
 		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
-		
-		//Incluindo os itens nos pedidos
+
+		// Incluindo os itens nos pedidos
 		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
 		ped2.getItens().addAll(Arrays.asList(ip3));
-		
-		//Incluindo os itens dos pedidos nos produtos
+
+		// Incluindo os itens dos pedidos nos produtos
 		p1.getItens().addAll(Arrays.asList(ip1));
 		p2.getItens().addAll(Arrays.asList(ip3));
 		p3.getItens().addAll(Arrays.asList(ip2));
-		
-		//Persistindo os ItemPedidos
+
+		// Persistindo os ItemPedidos
 		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
-		
+
 	}
 }
