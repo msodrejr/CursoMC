@@ -16,11 +16,14 @@ import org.springframework.stereotype.Service;
 import com.mauriciosodre.cursomc.domain.Cidade;
 import com.mauriciosodre.cursomc.domain.Cliente;
 import com.mauriciosodre.cursomc.domain.Endereco;
+import com.mauriciosodre.cursomc.domain.enums.Perfil;
 import com.mauriciosodre.cursomc.domain.enums.TipoCliente;
 import com.mauriciosodre.cursomc.dto.ClienteDTO;
 import com.mauriciosodre.cursomc.dto.ClienteNewDTO;
 import com.mauriciosodre.cursomc.repositories.ClienteRepository;
 import com.mauriciosodre.cursomc.repositories.EnderecoRepository;
+import com.mauriciosodre.cursomc.security.UserSS;
+import com.mauriciosodre.cursomc.services.exceptions.AuthorizationException;
 import com.mauriciosodre.cursomc.services.exceptions.DataIntegrityException;
 import com.mauriciosodre.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -36,6 +39,11 @@ public class ClienteService {
 	private BCryptPasswordEncoder pe;
 
 	public Cliente find(Integer id) {
+		
+		UserSS user = UserService.authenticated();
+		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
 
 		Optional<Cliente> obj = repo.findById(id);
 
