@@ -39,8 +39,6 @@ public class Cliente implements Serializable {
 	@JsonIgnore
 	private String senha;
 
-	private String imageUrl;
-
 	// Quando a regra de négocio permite deletar em cascata, adicione o cascade
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
 	private List<Endereco> enderecos = new ArrayList<>();
@@ -151,14 +149,6 @@ public class Cliente implements Serializable {
 
 	public void setPedidos(List<Pedido> pedidos) {
 		this.pedidos = pedidos;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
 	}
 
 	@Override
